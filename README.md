@@ -20,6 +20,7 @@ This repository tracks the configuration and adjustments made to my Ubuntu setup
 *   Transmission
 *   Telegram
 *   Gimp
+*   Gnome Tweaks
 
 ## Installation Commands
 
@@ -65,10 +66,10 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
-### 6. Gimp & Transmission
+### 6. Gimp, Transmission & Gnome Tweaks
 These are available in the default Ubuntu repositories.
 ```bash
-sudo apt install gimp transmission-gtk -y
+sudo apt install gimp transmission-gtk gnome-tweaks -y
 ```
 
 ### 7. Telegram
