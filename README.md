@@ -2,11 +2,6 @@
 
 This repository tracks the configuration and adjustments made to my Ubuntu setup.
 
-## How to Use
-
-1.  **Document Everything:** For every new configuration or tool added, update this `README.md` file.
-2.  **Keep it Concise:** Record only the final, specific configurations. Avoid suggestions or commented-out code.
-3.  **Commit Clearly:** Use clear and descriptive commit messages (e.g., `docs: Add VSCode installation command`).
 
 ## Terminal Customization
 
