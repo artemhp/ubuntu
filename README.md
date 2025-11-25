@@ -22,4 +22,17 @@ This repository tracks the configuration and adjustments made to my Ubuntu setup
 *   Gimp
 *   Gnome Tweaks
 
+## Ollama
+
+```bash
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull the gpt-oss model
+ollama pull gpt-oss
+
+# Run the gpt-oss model
+ollama run gpt-oss
+```
+
 
