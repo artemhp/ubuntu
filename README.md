@@ -45,6 +45,22 @@ gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action 'suspe
 gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action 'suspend'
 ```
 
+### Using Laptop with Closed Lid + External Monitor
+
+To prevent sleep when the lid is closed (e.g. using an external monitor), edit `/etc/systemd/logind.conf`:
+
+```bash
+# Uncomment and set these lines in /etc/systemd/logind.conf:
+# HandleLidSwitch=ignore
+# HandleLidSwitchExternalPower=ignore
+```
+
+Then apply without rebooting:
+
+```bash
+sudo systemctl restart systemd-logind
+```
+
 ## Google Drive
 
 Google Drive is mounted using rclone to provide proper file/folder names in VSCode and terminal.
