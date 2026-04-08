@@ -24,26 +24,27 @@ This repository tracks the configuration and adjustments made to my Ubuntu setup
 
 ## Power Management
 
-**Important: Laptop is configured to shutdown on lid close**
-
 This system uses hybrid graphics (AMD + NVIDIA RTX 3060) with on-demand GPU switching. When resuming from suspend, the display connector names can change, causing GNOME to reset display configuration (resolution, scaling, color settings).
 
 **Current Configuration:**
-- Lid close (AC power): Shutdown
-- Lid close (Battery): Shutdown
+- Lid close (AC power): Nothing (keeps running)
+- Lid close (Battery): Nothing (keeps running)
+- logind: `HandleLidSwitch=ignore`, `HandleLidSwitchExternalPower=ignore`
 
-This prevents display configuration resets that occur with suspend/resume on hybrid graphics systems.
+This prevents display configuration resets that occur with suspend/resume on hybrid graphics systems, and allows using an external monitor with the lid closed.
 
-**To change this behavior:**
+**To change lid close behavior (GNOME):**
 ```bash
 # View current settings
 gsettings get org.gnome.settings-daemon.plugins.power lid-close-ac-action
 gsettings get org.gnome.settings-daemon.plugins.power lid-close-battery-action
 
 # Options: 'suspend', 'shutdown', 'hibernate', 'nothing', 'blank'
-gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action 'suspend'
-gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action 'suspend'
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action 'nothing'
 ```
+
+Note: Both GNOME gsettings AND `/etc/systemd/logind.conf` must be set — logind controls system-level events, GNOME controls session-level actions (and can override logind via the API).
 
 ### Using Laptop with Closed Lid + External Monitor
 
@@ -59,6 +60,23 @@ Then apply without rebooting:
 
 ```bash
 sudo systemctl restart systemd-logind
+```
+
+### Keyboard Wakeup from Suspend
+
+By default, the ASUS ITE keyboard controller (`ITE Device(8910)`) has wakeup enabled, but its parent xHCI USB controller has wakeup disabled — blocking keyboard wakeup.
+
+Fix with a udev rule:
+
+```bash
+sudo tee /etc/udev/rules.d/90-keyboard-wakeup.rules > /dev/null << 'EOF'
+# Enable wakeup for the USB controller hosting the ASUS ITE keyboard
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="048d", ATTR{power/wakeup}="enabled"
+# Enable wakeup for the parent xHCI host controller (usb1)
+ACTION=="add", SUBSYSTEM=="usb", KERNEL=="usb1", ATTR{power/wakeup}="enabled"
+EOF
+
+sudo udevadm control --reload-rules
 ```
 
 ## Google Drive
